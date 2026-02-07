@@ -1,6 +1,13 @@
 from motor.motor_asyncio import AsyncIOMotorClient
+import os
+from dotenv import load_dotenv
 
-MONGO_DETAILS = "mongodb+srv://badhriprasathdr_db_user:<--------------->@od-system-cluster.kqapj43.mongodb.net/?appName=OD-System-Cluster"
+load_dotenv()
+
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWORD")
+
+MONGO_DETAILS = f"mongodb+srv://{USERNAME}:{PASSWORD}@od-system-cluster.kqapj43.mongodb.net/?appName=OD-System-Cluster"
 
 client = AsyncIOMotorClient(MONGO_DETAILS)
 
