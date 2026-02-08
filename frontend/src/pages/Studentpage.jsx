@@ -19,12 +19,24 @@ import {
   Download,
   Filter,
   Search,
-  BarChart3
+  BarChart3,
+  User,
+  Building,
+  Hash,
+  Users,
+  Globe,
+  Target,
+  Award,
+  ChevronRight,
+  AlertTriangle,
+  ShieldCheck,
+  Sparkles,
+  Zap
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-import Modal from "../components/Modal";
 import Dropdown from "../components/Dropdown";
+import "./Studentpage.css";
 
 export default function Studentpage() {
   const navigate = useNavigate();
@@ -202,6 +214,7 @@ export default function Studentpage() {
   const departmentOptions = [
     { value: "CSE", label: "Computer Science & Engineering" },
     { value: "ECE", label: "Electronics & Communication" },
+    {value: "AIDS", label: "Artificial Intelligence and Data Science"},
     { value: "EEE", label: "Electrical & Electronics" },
     { value: "MECH", label: "Mechanical Engineering" },
     { value: "CIVIL", label: "Civil Engineering" },
@@ -223,68 +236,96 @@ export default function Studentpage() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-        <div className="max-w-7xl mx-auto p-4 md:p-8">
+      <div className="relative overflow-hidden min-h-screen">
+        {/* Animated Background */}
+        <div className="ambient-background">
+          <div className="gradient-orb-1"></div>
+          <div className="gradient-orb-2"></div>
+          <div className="gradient-orb-3"></div>
+        </div>
+        
+        <div className="container relative z-10 p-4 md:p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-between mb-12"
+          >
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-all"
+              className="btn btn-secondary flex items-center gap-2"
             >
-              <ArrowLeft size={20} />
-              Back to Home
+              <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Home</span>
             </button>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              <GraduationCap className="text-blue-400" />
-              Student Portal
-            </h1>
+            
+            <div className="flex items-center gap-3">
+              <div className="section-icon">
+                <GraduationCap className="text-gradient" size={28} />
+              </div>
+              <h1 className="text-3xl font-bold text-gradient">
+                Student Portal
+              </h1>
+            </div>
+            
             <div className="w-32"></div>
-          </div>
+          </motion.div>
 
           {/* Login Card */}
           <div className="max-w-md mx-auto">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700 rounded-2xl p-8"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 100 }}
+              className="gradient-border hover-lift"
             >
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/20 mb-4">
-                  <GraduationCap className="text-blue-400" size={32} />
+              <div className="glass-panel p-8 overflow-hidden fade-in">
+                <div className="text-center mb-8">
+                  <div className="section-icon mx-auto mb-6">
+                    <GraduationCap className="text-gradient" size={36} />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2 text-gradient">
+                    Student Login
+                  </h2>
+                  <p className="text-gray-400">Access your OD management portal</p>
                 </div>
-                <h2 className="text-2xl font-bold">Student Login</h2>
-                <p className="text-gray-400 mt-2">Access your OD management portal</p>
+
+                <form onSubmit={handleLogin}>
+                  <div className="input-group">
+                    <label className="input-group label">
+                      College Email Address
+                    </label>
+                    <div className="input-with-icon">
+                      <input
+                        type="email"
+                        value={studentEmail}
+                        onChange={(e) => setStudentEmail(e.target.value)}
+                        placeholder="name.departmentYEAR@citchennai.net"
+                        className="focus-ring"
+                        required
+                      />
+                      <User className="input-icon" size={20} />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                      <AlertTriangle size={12} />
+                      Format: name.departmentYEAR@citchennai.net
+                    </p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="btn btn-primary w-full"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="animate-spin" size={20} />
+                    ) : (
+                      <ShieldCheck size={20} />
+                    )}
+                    {isLoading ? "Authenticating..." : "Sign in to Portal"}
+                  </button>
+                </form>
               </div>
-
-              <form onSubmit={handleLogin}>
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    College Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={studentEmail}
-                    onChange={(e) => setStudentEmail(e.target.value)}
-                    placeholder="name.departmentYEAR@citchennai.net"
-                    className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                    required
-                  />
-                  <p className="text-xs text-gray-400 mt-2">
-                    Format: name.departmentYEAR@citchennai.net
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 font-medium transition-all flex items-center justify-center gap-2"
-                >
-                  {isLoading ? (
-                    <Loader2 className="animate-spin" size={20} />
-                  ) : null}
-                  {isLoading ? "Signing in..." : "Sign in to Portal"}
-                </button>
-              </form>
             </motion.div>
           </div>
         </div>
@@ -293,24 +334,28 @@ export default function Studentpage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-gray-900/80 backdrop-blur-xl border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-4">
+      <div className="sticky top-0 z-50 glass-panel rounded-none border-x-0 border-t-0 mb-8">
+        <div className="container px-4 md:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate("/")}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                className="btn btn-secondary"
               >
                 <ArrowLeft size={18} />
                 <span className="hidden sm:inline">Home</span>
               </button>
-              <div className="flex items-center gap-2">
-                <GraduationCap className="text-blue-400" size={24} />
+              <div className="flex items-center gap-3">
+                <div className="section-icon">
+                  <GraduationCap className="text-gradient" size={20} />
+                </div>
                 <div>
-                  <h1 className="font-bold text-lg">Student Portal</h1>
-                  <p className="text-xs text-gray-400">{studentEmail}</p>
+                  <h1 className="font-bold text-lg text-gradient">
+                    Student Portal
+                  </h1>
+                  <p className="text-xs text-gray-400 truncate max-w-[200px]">{studentEmail}</p>
                 </div>
               </div>
             </div>
@@ -318,14 +363,14 @@ export default function Studentpage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={exportToPDF}
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
+                className="btn btn-secondary hidden sm:flex"
               >
                 <Download size={18} />
                 Export
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 transition-colors"
+                className="btn btn-secondary bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-500/30"
               >
                 <LogOut size={18} />
                 <span className="hidden sm:inline">Logout</span>
@@ -335,32 +380,24 @@ export default function Studentpage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
+      <div className="container p-4 md:p-8">
         {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="tab-container mb-8">
           <button
             onClick={() => setActiveTab("apply")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${
-              activeTab === "apply" 
-                ? "bg-gradient-to-r from-blue-600 to-purple-600" 
-                : "bg-gray-800 hover:bg-gray-700"
-            }`}
+            className={`tab-button ${activeTab === "apply" ? "active" : ""}`}
           >
             <PlusCircle size={20} />
             New Application
           </button>
           <button
             onClick={() => setActiveTab("history")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${
-              activeTab === "history" 
-                ? "bg-gradient-to-r from-blue-600 to-purple-600" 
-                : "bg-gray-800 hover:bg-gray-700"
-            }`}
+            className={`tab-button ${activeTab === "history" ? "active" : ""}`}
           >
             <History size={20} />
             Request History
             {stats.total > 0 && (
-              <span className="ml-2 px-2 py-1 text-xs rounded-full bg-blue-500/30">
+              <span className="ml-2 px-2 py-1 text-xs rounded-full bg-gradient-to-r from-blue-500/30 to-purple-500/30">
                 {stats.total}
               </span>
             )}
@@ -372,161 +409,237 @@ export default function Studentpage() {
           {activeTab === "apply" && (
             <motion.div
               key="apply"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700 rounded-2xl p-6 md:p-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fade-in"
             >
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold flex items-center gap-3">
-                    <PlusCircle className="text-blue-400" />
-                    New OD Application
-                  </h2>
-                  <p className="text-gray-400">Fill out the form below to submit your OD request</p>
-                </div>
-                <button
-                  onClick={() => setActiveTab("history")}
-                  className="text-sm text-blue-400 hover:text-blue-300"
-                >
-                  View History →
-                </button>
+              {/* Progress Indicator */}
+              <div className="progress-steps">
+                {["Student Info", "Academic Details", "Event Details"].map((step, index) => (
+                  <React.Fragment key={step}>
+                    <div className="progress-step">
+                      <div className={`step-number ${index === 0 ? "active" : ""}`}>
+                        {index === 0 ? <CheckCircle size={20} /> : index + 1}
+                      </div>
+                      <div className="step-info">
+                        <div className="step-title">Step {index + 1}</div>
+                        <div className="step-subtitle">{step}</div>
+                      </div>
+                    </div>
+                    {index < 2 && <div className="step-connector" />}
+                  </React.Fragment>
+                ))}
               </div>
 
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="glass-panel p-6 md:p-8">
+                <div className="flex items-center justify-between mb-8">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                      required
-                    />
+                    <h2 className="text-2xl font-bold flex items-center gap-3 text-gradient">
+                      <PlusCircle className="text-blue-400" />
+                      New OD Application
+                    </h2>
+                    <p className="text-gray-400 mt-1">Complete all sections to submit your request</p>
                   </div>
+                  <button
+                    onClick={() => setActiveTab("history")}
+                    className="text-sm text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
+                  >
+                    View History <ChevronRight size={16} />
+                  </button>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Department
-                    </label>
-                    <Dropdown
-                      options={departmentOptions}
-                      value={formData.dept_name}
-                      onChange={(value) => setFormData({...formData, dept_name: value})}
-                      placeholder="Select Department"
-                    />
-                  </div>
+                <form onSubmit={handleSubmit}>
+                  {/* Student Information Section */}
+                  <div className="form-section">
+                    <div className="section-header">
+                      <div className="section-icon bg-blue-500/10 border-blue-500/20">
+                        <User className="text-blue-400" size={20} />
+                      </div>
+                      <div>
+                        <h3 className="section-title">Student Information</h3>
+                        <p className="section-subtitle">Your personal details</p>
+                      </div>
+                    </div>
+                    
+                    <div className="form-grid">
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Full Name
+                        </label>
+                        <div className="input-with-icon">
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            className="focus-ring"
+                            required
+                          />
+                          <User className="input-icon" size={20} />
+                        </div>
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Roll Number
-                    </label>
-                    <input
-                      type="text"
-                      name="roll_no"
-                      value={formData.roll_no}
-                      onChange={(e) => setFormData({...formData, roll_no: e.target.value})}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Section
-                    </label>
-                    <input
-                      type="text"
-                      name="section"
-                      value={formData.section}
-                      onChange={(e) => setFormData({...formData, section: e.target.value})}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                      required
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Event Venue
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3.5 text-gray-500" size={20} />
-                      <input
-                        type="text"
-                        name="venue"
-                        value={formData.venue}
-                        onChange={(e) => setFormData({...formData, venue: e.target.value})}
-                        placeholder="e.g., IIT Madras, Chennai"
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                        required
-                      />
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Department
+                        </label>
+                        <div className="input-with-icon">
+                          <Dropdown
+                            options={departmentOptions}
+                            value={formData.dept_name}
+                            onChange={(value) => setFormData({...formData, dept_name: value})}
+                            placeholder="Select Department"
+                            className="w-full"
+                          />
+                          <Building className="input-icon" size={20} />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Reason for OD
-                    </label>
-                    <input
-                      type="text"
-                      name="reason"
-                      value={formData.reason}
-                      onChange={(e) => setFormData({...formData, reason: e.target.value})}
-                      placeholder="e.g., Technical Symposium, Sports Event, Conference"
-                      className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                      required
-                    />
-                  </div>
+                  {/* Academic Details Section */}
+                  <div className="form-section">
+                    <div className="section-header">
+                      <div className="section-icon bg-purple-500/10 border-purple-500/20">
+                        <Hash className="text-purple-400" size={20} />
+                      </div>
+                      <div>
+                        <h3 className="section-title">Academic Details</h3>
+                        <p className="section-subtitle">Your academic information</p>
+                      </div>
+                    </div>
+                    
+                    <div className="form-grid">
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Roll Number
+                        </label>
+                        <div className="input-with-icon">
+                          <input
+                            type="text"
+                            name="roll_no"
+                            value={formData.roll_no}
+                            onChange={(e) => setFormData({...formData, roll_no: e.target.value})}
+                            className="focus-ring"
+                            required
+                          />
+                          <Hash className="input-icon" size={20} />
+                        </div>
+                      </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Description
-                    </label>
-                    <div className="relative">
-                      <FileText className="absolute left-3 top-3.5 text-gray-500" size={20} />
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({...formData, description: e.target.value})}
-                        rows={4}
-                        placeholder="Provide detailed description of the event and your participation..."
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none"
-                        required
-                      />
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Section
+                        </label>
+                        <div className="input-with-icon">
+                          <input
+                            type="text"
+                            name="section"
+                            value={formData.section}
+                            onChange={(e) => setFormData({...formData, section: e.target.value})}
+                            className="focus-ring"
+                            required
+                          />
+                          <Users className="input-icon" size={20} />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex justify-end gap-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFormData({
-                        ...formData,
-                        roll_no: "",
-                        section: "",
-                        reason: "",
-                        venue: "",
-                        description: ""
-                      });
-                    }}
-                    className="px-6 py-3 rounded-lg border border-gray-600 hover:bg-gray-800 transition-colors"
-                  >
-                    Clear Form
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 font-medium flex items-center gap-2"
-                  >
-                    <PlusCircle size={20} />
-                    Submit Application
-                  </button>
-                </div>
-              </form>
+                  {/* Event Details Section */}
+                  <div className="form-section">
+                    <div className="section-header">
+                      <div className="section-icon bg-pink-500/10 border-pink-500/20">
+                        <Target className="text-pink-400" size={20} />
+                      </div>
+                      <div>
+                        <h3 className="section-title">Event Details</h3>
+                        <p className="section-subtitle">Information about the event</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Event Venue
+                        </label>
+                        <div className="input-with-icon">
+                          <MapPin className="input-icon" size={20} />
+                          <input
+                            type="text"
+                            name="venue"
+                            value={formData.venue}
+                            onChange={(e) => setFormData({...formData, venue: e.target.value})}
+                            placeholder="e.g., IIT Madras, Chennai"
+                            className="focus-ring"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Reason for OD
+                        </label>
+                        <input
+                          type="text"
+                          name="reason"
+                          value={formData.reason}
+                          onChange={(e) => setFormData({...formData, reason: e.target.value})}
+                          placeholder="e.g., Technical Symposium, Sports Event, Conference"
+                          className="input-with-icon input focus-ring"
+                          required
+                        />
+                      </div>
+
+                      <div className="input-group">
+                        <label className="input-group label">
+                          Description
+                        </label>
+                        <div className="input-with-icon">
+                          <FileText className="input-icon top-4" size={20} />
+                          <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={(e) => setFormData({...formData, description: e.target.value})}
+                            rows={5}
+                            placeholder="Provide detailed description of the event and your participation..."
+                            className="glass-textarea focus-ring"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-4 pt-6 border-t border-gray-800">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          roll_no: "",
+                          section: "",
+                          reason: "",
+                          venue: "",
+                          description: ""
+                        });
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      Clear Form
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                    >
+                      <PlusCircle size={20} />
+                      Submit Application
+                    </button>
+                  </div>
+                </form>
+              </div>
             </motion.div>
           )}
 
@@ -534,44 +647,45 @@ export default function Studentpage() {
           {activeTab === "history" && (
             <motion.div
               key="history"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              className="slide-in"
             >
               {/* Stats Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700 rounded-xl p-4">
+              <div className="stats-grid mb-8">
+                <div className="stat-card">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-400">Total</p>
-                      <p className="text-2xl font-bold">{stats.total}</p>
+                      <p className="text-2xl font-bold mt-1">{stats.total}</p>
                     </div>
                     <BarChart3 className="text-blue-400" size={24} />
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-yellow-500/10 to-amber-500/10 backdrop-blur-xl border border-yellow-500/30 rounded-xl p-4">
+                <div className="stat-card pending">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-yellow-300">Pending</p>
-                      <p className="text-2xl font-bold text-yellow-300">{stats.pending}</p>
+                      <p className="text-2xl font-bold text-yellow-300 mt-1">{stats.pending}</p>
                     </div>
                     <Clock className="text-yellow-400" size={24} />
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl border border-green-500/30 rounded-xl p-4">
+                <div className="stat-card approved">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-green-300">Approved</p>
-                      <p className="text-2xl font-bold text-green-300">{stats.approved}</p>
+                      <p className="text-2xl font-bold text-green-300 mt-1">{stats.approved}</p>
                     </div>
                     <CheckCircle className="text-green-400" size={24} />
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-red-500/10 to-pink-500/10 backdrop-blur-xl border border-red-500/30 rounded-xl p-4">
+                <div className="stat-card rejected">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-red-300">Rejected</p>
-                      <p className="text-2xl font-bold text-red-300">{stats.rejected}</p>
+                      <p className="text-2xl font-bold text-red-300 mt-1">{stats.rejected}</p>
                     </div>
                     <XCircle className="text-red-400" size={24} />
                   </div>
@@ -579,54 +693,62 @@ export default function Studentpage() {
               </div>
 
               {/* Filters */}
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-3.5 text-gray-500" size={20} />
-                  <input
-                    type="text"
-                    placeholder="Search requests..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Dropdown
-                    options={statusOptions}
-                    value={statusFilter}
-                    onChange={setStatusFilter}
-                    className="w-40"
-                  />
-                  <Dropdown
-                    options={sortOptions}
-                    value={sortBy}
-                    onChange={setSortBy}
-                    className="w-40"
-                  />
+              <div className="glass-panel p-6 mb-6">
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-4 top-3.5 text-gray-500" size={20} />
+                    <input
+                      type="text"
+                      placeholder="Search requests..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="input-with-icon input pl-12 focus-ring"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Dropdown
+                      options={statusOptions}
+                      value={statusFilter}
+                      onChange={setStatusFilter}
+                      className="w-40"
+                    />
+                    <Dropdown
+                      options={sortOptions}
+                      value={sortBy}
+                      onChange={setSortBy}
+                      className="w-40"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Request List */}
               <div className="space-y-4">
                 {filteredRequests.length === 0 ? (
-                  <div className="text-center py-12">
+                  <div className="text-center py-16 glass-panel">
                     <History className="mx-auto mb-4 text-gray-500" size={48} />
-                    <p className="text-gray-400">No OD requests found</p>
+                    <p className="text-gray-400 text-lg mb-2">No OD requests found</p>
+                    <p className="text-gray-500 text-sm">Try adjusting your filters or submit a new request</p>
                   </div>
                 ) : (
                   filteredRequests.map((request) => (
-                    <div
+                    <motion.div
                       key={request._id}
-                      className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-colors"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="glass-panel card-hover p-6"
                     >
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              request.status === 'approved' ? 'bg-green-500/20 text-green-300' :
-                              request.status === 'rejected' ? 'bg-red-500/20 text-red-300' :
-                              'bg-yellow-500/20 text-yellow-300'
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className={`status-badge ${
+                              request.status === 'approved' ? 'status-approved' :
+                              request.status === 'rejected' ? 'status-rejected' :
+                              'status-pending'
                             }`}>
+                              {request.status === 'approved' && <CheckCircle size={12} />}
+                              {request.status === 'rejected' && <XCircle size={12} />}
+                              {request.status === 'pending' && <Clock size={12} />}
                               {request.status.toUpperCase()}
                             </span>
                             <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -634,13 +756,13 @@ export default function Studentpage() {
                               {new Date(request.applied_at || request.date).toLocaleDateString()}
                             </div>
                           </div>
-                          <h3 className="text-lg font-bold mb-1">{request.venue}</h3>
+                          <h3 className="text-lg font-bold mb-2 text-white">{request.venue}</h3>
                           <p className="text-gray-300">{request.reason}</p>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
                           <button
                             onClick={fetchStudentODs}
-                            className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                            className="btn btn-secondary p-2.5"
                             title="Refresh"
                           >
                             <RefreshCw size={18} className="text-gray-400" />
@@ -648,13 +770,13 @@ export default function Studentpage() {
                         </div>
                       </div>
                       
-                      <div className="text-sm text-gray-400 mb-4">
+                      <div className="text-sm text-gray-400 mb-4 bg-gray-800/30 rounded-xl p-4">
                         {request.description}
                       </div>
                       
-                      <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center justify-between text-sm pt-4 border-t border-gray-800">
                         <div className="text-gray-500">
-                          Request ID: {request._id?.substring(0, 8)}...
+                          Request ID: {request._id?.substring(0, 10)}...
                         </div>
                         <div className="flex items-center gap-2">
                           {request.status === 'approved' && (
@@ -666,14 +788,18 @@ export default function Studentpage() {
                           {request.status === 'pending' && (
                             <Clock className="text-yellow-400" size={16} />
                           )}
-                          <span>
+                          <span className={
+                            request.status === 'approved' ? 'text-green-300' :
+                            request.status === 'rejected' ? 'text-red-300' :
+                            'text-yellow-300'
+                          }>
                             {request.status === 'approved' ? 'Approved' : 
                              request.status === 'rejected' ? 'Rejected' : 
                              'Pending Review'}
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))
                 )}
               </div>
@@ -694,65 +820,82 @@ export default function Studentpage() {
       </div>
 
       {/* Confirmation Modal */}
-      <Modal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        title="Confirm OD Submission"
-        size="md"
-      >
-        <div className="space-y-4">
-          <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="text-blue-400 mt-0.5" size={20} />
-              <div>
-                <p className="font-medium text-blue-300">Please review your application</p>
-                <p className="text-sm text-blue-200/80 mt-1">
-                  Once submitted, your OD request will be sent for faculty review. 
-                  You cannot edit the request after submission.
-                </p>
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-[9999]">
+          
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowConfirmModal(false)}
+          />
+
+          {/* Centered Modal */}
+          <div className="fixed top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 p-4">
+            <div className="glass-panel p-6 rounded-2xl border border-blue-500/30 animate-scale-in">
+              
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20">
+                  <AlertCircle className="text-blue-400" size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gradient">
+                  Confirm OD Submission
+                </h3>
               </div>
-            </div>
-          </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-gray-400">Name:</span>
-              <span className="font-medium">{formData.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Department:</span>
-              <span className="font-medium">{formData.dept_name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Roll No:</span>
-              <span className="font-medium">{formData.roll_no}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Reason:</span>
-              <span className="font-medium">{formData.reason}</span>
-            </div>
-          </div>
+              <div className="space-y-4 mb-8">
+                <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30">
+                  <p className="font-medium text-blue-300">
+                    Please review your application
+                  </p>
+                  <p className="text-sm text-gray-300 mt-1">
+                    Once submitted, your OD request will be sent for faculty review.
+                    You cannot edit the request after submission.
+                  </p>
+                </div>
 
-          <div className="flex gap-3 pt-4">
-            <button
-              onClick={() => setShowConfirmModal(false)}
-              className="flex-1 py-3 rounded-lg border border-gray-600 hover:bg-gray-800 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={confirmSubmit}
-              disabled={isLoading}
-              className="flex-1 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 font-medium flex items-center justify-center gap-2"
-            >
-              {isLoading ? (
-                <Loader2 className="animate-spin" size={20} />
-              ) : null}
-              {isLoading ? 'Submitting...' : 'Confirm & Submit'}
-            </button>
+                <div className="space-y-3">
+                  <div className="flex justify-between py-2">
+                    <span className="text-gray-400">Name:</span>
+                    <span className="font-medium text-white">{formData.name}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-gray-400">Department:</span>
+                    <span className="font-medium text-white">{formData.dept_name}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-gray-400">Roll No:</span>
+                    <span className="font-medium text-white">{formData.roll_no}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-gray-400">Reason:</span>
+                    <span className="font-medium text-blue-400">{formData.reason}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowConfirmModal(false)}
+                  className="btn btn-secondary flex-1"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmSubmit}
+                  disabled={isLoading}
+                  className="btn btn-primary flex-1"
+                >
+                  {isLoading && <Loader2 className="animate-spin" size={20} />}
+                  {isLoading ? "Submitting..." : "Confirm & Submit"}
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
-      </Modal>
+      )}
+
     </div>
   );
 }

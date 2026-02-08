@@ -20,6 +20,7 @@ import {
   EyeOff
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import "./facultypage.css";
 
 export default function Facultypage() {
   const navigate = useNavigate();
@@ -211,8 +212,15 @@ export default function Facultypage() {
   // Login Form
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative overflow-hidden min-h-screen">
+        {/* Animated Background */}
+        <div className="faculty-background">
+          <div className="faculty-orb-1"></div>
+          <div className="faculty-orb-2"></div>
+          <div className="faculty-orb-3"></div>
+        </div>
+        
+        <div className="container relative z-10 p-4 md:p-8">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -221,18 +229,18 @@ export default function Facultypage() {
           >
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-all"
+              className="faculty-btn faculty-btn-secondary flex items-center gap-2"
             >
               <ArrowLeft size={20} />
               Back to Home
             </button>
             
             <div className="text-center">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
+              <h1 className="text-3xl font-bold flex items-center gap-3 faculty-text-gradient">
                 <ShieldCheck className="text-purple-400" />
                 Faculty Portal - Admin Access
               </h1>
-              <p className="text-gray-400">Restricted access for faculty members only</p>
+              <p className="faculty-text-muted">Restricted access for faculty members only</p>
             </div>
             
             <div className="w-32"></div>
@@ -242,39 +250,40 @@ export default function Facultypage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="max-w-md mx-auto mt-20 p-8 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700"
+            className="faculty-login-card"
           >
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center p-4 rounded-full bg-purple-500/20 mb-4">
                 <ShieldCheck className="text-purple-400" size={48} />
               </div>
               <h2 className="text-2xl font-bold">Faculty Login</h2>
-              <p className="text-gray-400 mt-2">Enter admin credentials to access the portal</p>
+              <p className="faculty-text-muted mt-2">Enter admin credentials to access the portal</p>
             </div>
             
-            <form onSubmit={handleFacultyLogin}>
-              <div className="mb-6">
-                <label className="block text-gray-300 mb-2">Username</label>
-                <input
-                  type="text"
-                  value={loginData.username}
-                  onChange={(e) => setLoginData({...loginData, username: e.target.value})}
-                  placeholder="Enter admin username"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-                  required
-                  disabled={isLoading}
-                />
+            <form onSubmit={handleFacultyLogin} className="faculty-space-y-6">
+              <div className="faculty-input-group">
+                <label className="faculty-input-group label">Username</label>
+                <div className="faculty-input-with-icon">
+                  <input
+                    type="text"
+                    value={loginData.username}
+                    onChange={(e) => setLoginData({...loginData, username: e.target.value})}
+                    placeholder="Enter admin username"
+                    required
+                    disabled={isLoading}
+                  />
+                  <User className="faculty-input-icon" size={20} />
+                </div>
               </div>
               
-              <div className="mb-6">
-                <label className="block text-gray-300 mb-2">Password</label>
-                <div className="relative">
+              <div className="faculty-input-group">
+                <label className="faculty-input-group label">Password</label>
+                <div className="faculty-input-with-icon">
                   <input
                     type={showPassword ? "text" : "password"}
                     value={loginData.password}
                     onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                     placeholder="Enter admin password"
-                    className="w-full px-4 py-3 pr-12 rounded-lg bg-gray-900 border border-gray-700 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                     required
                     disabled={isLoading}
                   />
@@ -286,7 +295,7 @@ export default function Facultypage() {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                <p className="text-sm text-gray-400 mt-2">
+                <p className="text-sm faculty-text-muted mt-2">
                   Hint: Password is "admin123"
                 </p>
               </div>
@@ -294,7 +303,7 @@ export default function Facultypage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transition-all font-bold flex items-center justify-center gap-2 disabled:opacity-50"
+                className="faculty-btn faculty-btn-primary w-full"
               >
                 {isLoading ? (
                   <>
@@ -314,16 +323,23 @@ export default function Facultypage() {
 
   // Main Faculty Dashboard
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Loading Overlay */}
-        {isLoading && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-            <Loader2 className="animate-spin text-purple-500" size={48} />
-            <p className="text-white mt-4">Processing...</p>
-          </div>
-        )}
+    <div className="relative overflow-hidden min-h-screen">
+      {/* Animated Background */}
+      <div className="faculty-background">
+        <div className="faculty-orb-1"></div>
+        <div className="faculty-orb-2"></div>
+        <div className="faculty-orb-3"></div>
+      </div>
 
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="faculty-loading-overlay">
+          <Loader2 className="animate-spin text-purple-500" size={48} />
+          <p className="text-white mt-4">Processing...</p>
+        </div>
+      )}
+
+      <div className="container relative z-10 p-4 md:p-8">
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -333,31 +349,31 @@ export default function Facultypage() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-all"
+              className="faculty-btn faculty-btn-secondary flex items-center gap-2"
             >
               <ArrowLeft size={20} />
               Back to Home
             </button>
             
             <div className="text-center md:text-left">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
+              <h1 className="text-3xl font-bold flex items-center gap-3 faculty-text-gradient">
                 <ShieldCheck className="text-purple-400" />
                 Faculty Portal
               </h1>
-              <p className="text-gray-400">Review and manage OD requests</p>
+              <p className="faculty-text-muted">Review and manage OD requests</p>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="text-right hidden md:block">
               <p className="font-medium">{localStorage.getItem("facultyUsername") || "Admin"}</p>
-              <p className="text-sm text-gray-400">Faculty Account</p>
+              <p className="text-sm faculty-text-muted">Faculty Account</p>
             </div>
             
             <button
               onClick={fetchAllODs}
               disabled={isLoading}
-              className="px-4 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-all flex items-center gap-2 disabled:opacity-50"
+              className="faculty-btn faculty-btn-secondary flex items-center gap-2"
             >
               <RefreshCw size={20} className={isLoading ? "animate-spin" : ""} />
               Refresh
@@ -366,7 +382,7 @@ export default function Facultypage() {
             <button
               onClick={exportToExcel}
               disabled={isLoading}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all flex items-center gap-2 disabled:opacity-50"
+              className="faculty-btn faculty-btn-success flex items-center gap-2"
             >
               <Download size={20} />
               Export
@@ -374,7 +390,7 @@ export default function Facultypage() {
             
             <button
               onClick={handleLogout}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all flex items-center gap-2"
+              className="faculty-btn faculty-btn-danger flex items-center gap-2"
             >
               <LogOut size={20} />
               Logout
@@ -383,41 +399,41 @@ export default function Facultypage() {
         </motion.div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700">
+        <div className="faculty-stats-grid mb-8">
+          <div className="faculty-stat-card faculty-stat-card-total">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400">Total Requests</p>
+                <p className="faculty-text-muted">Total Requests</p>
                 <p className="text-3xl font-bold">{odRequests.length}</p>
               </div>
               <AlertCircle className="text-blue-400" size={32} />
             </div>
           </div>
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700">
+          <div className="faculty-stat-card faculty-stat-card-pending">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400">Pending</p>
-                <p className="text-3xl font-bold text-yellow-400">{getStatusCount('pending')}</p>
+                <p className="faculty-text-warning">Pending</p>
+                <p className="text-3xl font-bold faculty-text-warning">{getStatusCount('pending')}</p>
               </div>
-              <Clock className="text-yellow-400" size={32} />
+              <Clock className="faculty-text-warning" size={32} />
             </div>
           </div>
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700">
+          <div className="faculty-stat-card faculty-stat-card-approved">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400">Approved</p>
-                <p className="text-3xl font-bold text-green-400">{getStatusCount('approved')}</p>
+                <p className="faculty-text-success">Approved</p>
+                <p className="text-3xl font-bold faculty-text-success">{getStatusCount('approved')}</p>
               </div>
-              <CheckCircle className="text-green-400" size={32} />
+              <CheckCircle className="faculty-text-success" size={32} />
             </div>
           </div>
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700">
+          <div className="faculty-stat-card faculty-stat-card-rejected">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400">Rejected</p>
-                <p className="text-3xl font-bold text-red-400">{getStatusCount('rejected')}</p>
+                <p className="faculty-text-danger">Rejected</p>
+                <p className="text-3xl font-bold faculty-text-danger">{getStatusCount('rejected')}</p>
               </div>
-              <XCircle className="text-red-400" size={32} />
+              <XCircle className="faculty-text-danger" size={32} />
             </div>
           </div>
         </div>
@@ -431,28 +447,20 @@ export default function Facultypage() {
               placeholder="Search by name, roll number, email, or reason..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-purple-500 focus:outline-none"
+              className="faculty-input-with-icon input pl-12"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="faculty-filter-buttons">
             <button
               onClick={() => setFilterStatus("all")}
-              className={`px-4 py-3 rounded-lg flex items-center gap-2 transition-all ${
-                filterStatus === "all" 
-                  ? "bg-gradient-to-r from-purple-600 to-blue-600" 
-                  : "bg-gray-800/50 hover:bg-gray-800"
-              }`}
+              className={`faculty-filter-btn ${filterStatus === "all" ? "active" : ""}`}
             >
               <Filter size={20} />
               All ({odRequests.length})
             </button>
             <button
               onClick={() => setFilterStatus("pending")}
-              className={`px-4 py-3 rounded-lg flex items-center gap-2 transition-all ${
-                filterStatus === "pending" 
-                  ? "bg-gradient-to-r from-yellow-600 to-amber-600" 
-                  : "bg-gray-800/50 hover:bg-gray-800"
-              }`}
+              className={`faculty-filter-btn ${filterStatus === "pending" ? "active" : ""}`}
             >
               <Clock size={20} />
               Pending ({getStatusCount('pending')})
@@ -467,46 +475,42 @@ export default function Facultypage() {
             <h2 className="text-xl font-bold mb-4">
               OD Requests ({filteredRequests.length})
               {searchTerm && (
-                <span className="text-sm text-gray-400 ml-2">
+                <span className="text-sm faculty-text-muted ml-2">
                   filtered by "{searchTerm}"
                 </span>
               )}
             </h2>
             
             {filteredRequests.length === 0 ? (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 faculty-glass-panel">
                 <Search size={48} className="mx-auto mb-4 opacity-50" />
                 <p className="text-xl">No OD requests found</p>
-                <p className="text-sm">Try changing your search or filter criteria</p>
+                <p className="text-sm faculty-text-muted">Try changing your search or filter criteria</p>
               </div>
             ) : (
-              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              <div className="faculty-scrollable space-y-4 max-h-[600px] overflow-y-auto pr-2">
                 {filteredRequests.map((request) => (
                   <motion.div
                     key={request._id}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     onClick={() => setSelectedRequest(request)}
-                    className={`p-4 rounded-xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border cursor-pointer transition-all ${
-                      selectedRequest?._id === request._id 
-                        ? 'border-purple-500 bg-purple-500/10' 
-                        : 'border-gray-700 hover:border-gray-600'
-                    }`}
+                    className={`faculty-request-item ${selectedRequest?._id === request._id ? 'selected' : ''}`}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="font-bold text-lg flex items-center gap-2">
-                          <User size={16} className="text-gray-400" />
+                          <User size={16} className="faculty-text-muted" />
                           {request.name || "N/A"}
                         </h3>
-                        <p className="text-gray-400 text-sm">
+                        <p className="faculty-text-muted text-sm">
                           {request.roll_no || "N/A"} • {request.dept_name || "N/A"} • {request.section || "N/A"}
                         </p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        request.status === 'approved' ? 'bg-green-500/20 text-green-300' :
-                        request.status === 'rejected' ? 'bg-red-500/20 text-red-300' :
-                        'bg-yellow-500/20 text-yellow-300'
+                      <span className={`faculty-status-badge ${
+                        request.status === 'approved' ? 'faculty-status-approved' :
+                        request.status === 'rejected' ? 'faculty-status-rejected' :
+                        'faculty-status-pending'
                       }`}>
                         {request.status?.toUpperCase() || "PENDING"}
                       </span>
@@ -514,21 +518,21 @@ export default function Facultypage() {
                     
                     <div className="mb-2">
                       <p className="text-gray-300 font-medium">{request.reason || "No reason provided"}</p>
-                      <p className="text-gray-400 text-sm mt-1">
+                      <p className="faculty-text-muted text-sm mt-1">
                         <span className="font-medium">Venue:</span> {request.venue || "N/A"}
                       </p>
                     </div>
                     
-                    <p className="text-gray-500 text-sm truncate mb-3">
+                    <p className="faculty-text-muted text-sm truncate mb-3">
                       {request.description || "No description provided"}
                     </p>
                     
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2 text-gray-500">
+                      <div className="flex items-center gap-2 faculty-text-muted">
                         <Mail size={14} />
                         <span className="truncate max-w-[200px]">{request.student_email || "N/A"}</span>
                       </div>
-                      <div className="text-gray-400">
+                      <div className="faculty-text-muted">
                         {formatDate(request.applied_at)}
                       </div>
                     </div>
@@ -545,70 +549,70 @@ export default function Facultypage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:w-1/2"
             >
-              <div className="sticky top-4 p-6 rounded-2xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl border border-gray-700">
+              <div className="faculty-details-panel faculty-glass-panel p-6">
                 <div className="flex justify-between items-start mb-6">
-                  <h2 className="text-2xl font-bold">Request Details</h2>
+                  <h2 className="text-2xl font-bold faculty-text-gradient">Request Details</h2>
                   <button
                     onClick={() => setSelectedRequest(null)}
-                    className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-800"
+                    className="faculty-btn faculty-btn-secondary p-1 rounded-full"
                   >
                     ×
                   </button>
                 </div>
 
-                <div className="space-y-6">
+                <div className="faculty-space-y-6">
                   {/* Student Info */}
-                  <div className="p-4 rounded-lg bg-gray-900/50">
+                  <div className="faculty-details-section">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-2 rounded-lg bg-purple-500/20">
                         <User className="text-purple-400" size={24} />
                       </div>
                       <div>
                         <h3 className="font-bold text-xl">{selectedRequest.name || "N/A"}</h3>
-                        <p className="text-gray-400">{selectedRequest.student_email || "N/A"}</p>
+                        <p className="faculty-text-muted">{selectedRequest.student_email || "N/A"}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-gray-400 text-sm">Roll Number</p>
+                        <p className="faculty-text-muted text-sm">Roll Number</p>
                         <p className="font-medium">{selectedRequest.roll_no || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Department</p>
+                        <p className="faculty-text-muted text-sm">Department</p>
                         <p className="font-medium">{selectedRequest.dept_name || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Section</p>
+                        <p className="faculty-text-muted text-sm">Section</p>
                         <p className="font-medium">{selectedRequest.section || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Applied On</p>
+                        <p className="faculty-text-muted text-sm">Applied On</p>
                         <p className="font-medium">{formatDate(selectedRequest.applied_at)}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Request Details */}
-                  <div className="p-4 rounded-lg bg-gray-900/50">
+                  <div className="faculty-details-section">
                     <h4 className="font-bold mb-3 flex items-center gap-2">
                       <BookOpen size={20} />
                       OD Request Information
                     </h4>
-                    <div className="space-y-4">
+                    <div className="faculty-space-y-4">
                       <div>
-                        <p className="text-gray-400 text-sm">Reason for OD</p>
+                        <p className="faculty-text-muted text-sm">Reason for OD</p>
                         <p className="font-medium p-3 rounded bg-gray-800/50 mt-1">
                           {selectedRequest.reason || "No reason provided"}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Venue</p>
+                        <p className="faculty-text-muted text-sm">Venue</p>
                         <p className="font-medium p-3 rounded bg-gray-800/50 mt-1">
                           {selectedRequest.venue || "N/A"}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Description</p>
+                        <p className="faculty-text-muted text-sm">Description</p>
                         <p className="font-medium text-gray-300 p-3 rounded bg-gray-800/50 mt-1 whitespace-pre-wrap">
                           {selectedRequest.description || "No description provided"}
                         </p>
@@ -617,12 +621,12 @@ export default function Facultypage() {
                   </div>
 
                   {/* Current Status */}
-                  <div className="p-4 rounded-lg bg-gray-900/50">
+                  <div className="faculty-details-section">
                     <h4 className="font-bold mb-3">Current Status</h4>
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-                      selectedRequest.status === 'approved' ? 'bg-green-500/20 text-green-300' :
-                      selectedRequest.status === 'rejected' ? 'bg-red-500/20 text-red-300' :
-                      'bg-yellow-500/20 text-yellow-300'
+                    <div className={`faculty-status-badge ${
+                      selectedRequest.status === 'approved' ? 'faculty-status-approved' :
+                      selectedRequest.status === 'rejected' ? 'faculty-status-rejected' :
+                      'faculty-status-pending'
                     }`}>
                       {selectedRequest.status === 'approved' ? <CheckCircle size={20} /> :
                        selectedRequest.status === 'rejected' ? <XCircle size={20} /> :
@@ -634,17 +638,13 @@ export default function Facultypage() {
                   </div>
 
                   {/* Status Actions */}
-                  <div className="p-4 rounded-lg bg-gray-900/50">
+                  <div className="faculty-details-section">
                     <h4 className="font-bold mb-3">Update Status</h4>
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="faculty-action-buttons">
                       <button
                         onClick={() => handleStatusUpdate(selectedRequest._id, 'approved')}
                         disabled={selectedRequest.status === 'approved' || isLoading}
-                        className={`flex-1 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${
-                          selectedRequest.status === 'approved'
-                            ? 'bg-green-600/30 text-green-300 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
-                        } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className="faculty-action-btn faculty-action-approve"
                       >
                         <CheckCircle size={20} />
                         Approve
@@ -652,17 +652,13 @@ export default function Facultypage() {
                       <button
                         onClick={() => handleStatusUpdate(selectedRequest._id, 'rejected')}
                         disabled={selectedRequest.status === 'rejected' || isLoading}
-                        className={`flex-1 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${
-                          selectedRequest.status === 'rejected'
-                            ? 'bg-red-600/30 text-red-300 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700'
-                        } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className="faculty-action-btn faculty-action-reject"
                       >
                         <XCircle size={20} />
                         Reject
                       </button>
                     </div>
-                    <p className="text-gray-400 text-sm mt-3">
+                    <p className="faculty-text-muted text-sm mt-3">
                       Clicking "Approve" or "Reject" will immediately update the student's request status.
                     </p>
                   </div>
