@@ -48,7 +48,7 @@ export default function Facultypage() {
   const fetchAllODs = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/od/all");
+      const response = await fetch("https://on-duty-tracker-application.onrender.com/od/all");
       if (!response.ok) {
         throw new Error("Failed to fetch OD requests");
       }
@@ -67,7 +67,7 @@ export default function Facultypage() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("http://localhost:8000/od/auth/faculty-login", {
+      const response = await fetch("https://on-duty-tracker-application.onrender.com/od/auth/faculty-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +115,7 @@ export default function Facultypage() {
     
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/od/status/${id}`, {
+      const response = await fetch(`https://on-duty-tracker-application.onrender.com/od/status/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
